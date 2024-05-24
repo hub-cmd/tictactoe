@@ -39,6 +39,35 @@ function GameController(){
           `Placing ${getCurrentPlayer().mark} at ${position}...`
         );
         Gameboard.placeMark(getCurrentPlayer().mark,position);
+        const board = Gameboard.getBoard();
+        const checkWin = () => {
+            const patterns = [
+            [0, 1, 2], [0, 3, 6], [0, 4, 8], // For index 0
+            [4, 5, 3], [4, 2, 6], [4, 7, 1], // For index 4
+            [8, 7, 6], [8, 5, 2]              // For index 8
+            ];
+
+            for (const pattern of patterns) {
+                const [a, b, c] = pattern;
+                if (board[a] === board[b] && board[b] === board[c] && board[a] !== 0) {
+                    console.log(`${getCurrentPlayer().mark} is the winner`)
+                    return true;
+                }
+            }
+            if(board.filter((value) => value ==='X'|| value ==='O').length === 9){
+                console.log('It\'s a tie');
+                return true;
+            }
+            return false;
+        }
+        if(checkWin()){  
+            console.log('Game Ends'); 
+            board.forEach((element,index) => {
+                if(element === 'X' || element === 'O') board[index] = 0;
+            });
+            currentPlayer = playerOne;
+            return;
+        }
         switchPlayerTurn();
         printNewRound();
     };
@@ -53,11 +82,13 @@ function GameController(){
 
 
 const game = GameController();
-game.playRound(1);
 game.playRound(2);
-game.playRound(9);
+game.playRound(1);
 game.playRound(4);
+game.playRound(9);
+game.playRound(6);
 game.playRound(5);
+game.playRound(1);
 
 
 
